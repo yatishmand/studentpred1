@@ -1,7 +1,7 @@
-google-generativeai
-scikit-learn
-pandas
-numpy
-matplotlib
-seaborn
 streamlit
+pandas
+scikit-learn
+xgboost
+seaborn
+matplotlib
+requests
