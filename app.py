@@ -6,27 +6,34 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import accuracy_score
-import requests  # For free serverless Llama API call
+import requests
 import time
 
-# Page Configuration
-st.set_page_config(page_title="Student Performance Prediction System", layout="wide", page_icon="🎓")
+# Page Configuration - Hacker Theme Look
+st.set_page_config(page_title="Student Performance Core", layout="wide", page_icon="⚡")
 
-# Custom Premium Styling
+# Cyberpunk / Gaming Custom High-Gloss CSS Theme
 st.markdown("""
     <style>
-    .main { background-color: #f8fafc; }
-    .stButton>button { width: 100%; background-color: #4F46E5; color: white; font-weight: bold; border-radius: 8px; height: 45px; }
-    .report-card { background-color: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #4F46E5; }
-    .thought-box { background-color: #FFFBEB; border-left: 4px solid #D97706; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 13px; color: #78350F; margin-bottom: 10px; }
-    .chat-user { background-color: #E0E7FF; padding: 10px 15px; border-radius: 15px 15px 0px 15px; margin-bottom: 10px; text-align: right; margin-left: 20%; color: #1E3A8A; font-weight: 500; }
-    .chat-bot { background-color: #F1F5F9; padding: 10px 15px; border-radius: 15px 15px 15px 0px; margin-bottom: 10px; border-left: 4px solid #10B981; margin-right: 20%; color: #334155; }
+    .main { background-color: #0b0f19; color: #e2e8f0; }
+    .stButton>button { width: 100%; background-color: #3b82f6; color: white; font-weight: bold; border-radius: 8px; height: 45px; border: 1px solid #60a5fa; }
+    
+    /* Cyber Matrix Warning Boxes */
+    .cyber-card { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 25px; border-radius: 12px; border: 2px solid #3b82f6; box-shadow: 0 0 15px rgba(59,130,246,0.3); margin-bottom: 15px; }
+    .threat-critical { background: #450a0a; border: 2px solid #ef4444; color: #fca5a5; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(239,68,68,0.4); animation: blinker 1.5s linear infinite; }
+    .threat-warning { background: #451a03; border: 2px solid #f97316; color: #ffedd5; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(249,115,22,0.3); }
+    .threat-safe { background: #064e3b; border: 2px solid #10b981; color: #d1fae5; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(16,185,129,0.3); }
+    
+    /* Terminal Console Look */
+    .cyber-terminal { background-color: #020617; border-left: 5px solid #10b981; padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace; color: #38bdf8; font-size: 14px; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
+    
+    /* Blinking Animation for Threat Alert */
+    @keyframes blinker { 50% { opacity: 0.85; border-color: #b91c1c; box-shadow: 0 0 30px rgba(239,68,68,0.6); } }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🎓 Student Performance Prediction System")
-st.markdown("An advanced AI Agent deployment tracking 12 behavioral, psychological, and LMS parameters dynamically.")
+st.title("⚡ CYBERNETIC STUDENT SURVIVAL & PERFORMANCE HUB")
+st.markdown("<span style='color:#94a3b8;'>Decrypting LMS telemetry pipelines, behavioral latency, and physiological overload markers.</span>", unsafe_allow_html=True)
 st.markdown("---")
 
 @st.cache_data
@@ -35,7 +42,6 @@ def load_and_engineer_data():
     np.random.seed(42)
     n = len(df)
     
-    # Statistical Linkage Pipeline
     engagement_score = (df['raisedhands'] + df['VisITedResources'] + df['AnnouncementsView'] + df['Discussion']) / 4
     df['Attendance'] = (engagement_score * 0.4 + np.random.normal(65, 10, n)).clip(45, 100).astype(int)
     df['StudyHours'] = (engagement_score * 0.08 + np.random.normal(3, 1.5, n)).clip(1, 14).astype(int)
@@ -78,38 +84,43 @@ try:
     y = df['Class']
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
     model = RandomForestClassifier(n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
-    acc = accuracy_score(y_test, model.predict(X_test))
 
-    # Sidebar UI Tracker
-    st.sidebar.header("⚙️ Core Infrastructure")
-    st.sidebar.metric(label="Model Decision Accuracy", value=f"{acc*100:.2f}%")
-    st.sidebar.success("🤖 Llama-3 AI Agent Core: ACTIVE")
+    # Sidebar Status Tracker
+    st.sidebar.markdown("### 🖥️ Core Status Panel")
+    st.sidebar.info("Cyber Engine: ACTIVE\n\nAPI Framework: KEYLESS LOCAL FLUID")
 
-    tab1, tab2, tab3 = st.tabs(["🔮 Intelligent Diagnostic Engine", "🤖 Autonomous Llama AI Agent Chat", "📊 Statistical Research Data Core"])
+    tab1, tab2, tab3 = st.tabs(["🎮 Interactive Core Simulator", "🤖 Llama-3 Deep Network Agent", "📊 Core Architecture Data"])
     
-    # ==================== TAB 1: DIAGNOSTIC ENGINE ====================
+    # ==================== TAB 1: CORE SIMULATOR & RPG SURVIVAL BAR ====================
     with tab1:
-        st.subheader("🎯 Multi-Dimensional Feature Simulator")
+        st.subheader("🎛️ Live Telemetry Control Desk")
+        
         col1, col2 = st.columns(2)
         with col1:
-            st.markdown("##### 📝 Academic LMS Parameters")
+            st.markdown("<h5 style='color:#3b82f6;'>📝 Digital LMS Footprint</h5>", unsafe_allow_html=True)
             gender_input = st.selectbox("Student Gender", options=["Male", "Female"])
-            stage_input = st.selectbox("Current Educational Level", options=["Lowerlevel", "MiddleSchool", "HighSchool"])
-            raised_hands = st.slider("Classroom Engagement (Raised Hands)", 0, 100, 60)
-            visited_resources = st.slider("LMS Resource Clicks", 0, 100, 65)
-            announcements = st.slider("Announcements Viewed", 0, 100, 45)
-            discussion = st.slider("Discussion Participation", 0, 100, 50)
+            stage_input = st.selectbox("Current Academic Stage Level", options=["Lowerlevel", "MiddleSchool", "HighSchool"])
+            raised_hands = st.slider("Classroom Interaction Rank (Raised Hands)", 0, 100, 50)
+            visited_resources = st.slider("LMS Database Clicks (Portal Activities)", 0, 100, 55)
+            announcements = st.slider("System Matrix Notifications Viewed", 0, 100, 40)
+            discussion = st.slider("Discussion Grid Forum Participation", 0, 100, 45)
+        
         with col2:
-            st.markdown("##### 🧠 Physiology & Wellness Parameters")
-            study_hours = st.slider("Daily Study Hours", 0, 15, 5)
-            sleep_time = st.slider("Average Sleep Cycle (Hours)", 4, 12, 7)
-            attendance = st.slider("Verified Attendance (%)", 0, 100, 85)
-            extracurriculars = st.slider("Weekly Extracurricular Hours", 0, 10, 2)
-            mh_input = st.selectbox("Psychological Evaluation State", options=["Excellent", "Good", "Stressed", "Depressed"])
-            counsel_input = st.selectbox("Prior Professional Counseling?", options=["No", "Yes"])
+            st.markdown("<h5 style='color:#10b981;'>🏃 Physiological Grid Data</h5>", unsafe_allow_html=True)
+            study_hours = st.slider("Daily Self-Study Threshold Blocks", 0, 15, 4)
+            sleep_time = st.slider("Sleep Core Battery Duration (Hours)", 4, 12, 6)
+            attendance = st.slider("Verified Campus Attendance Record (%)", 0, 100, 75)
+            extracurriculars = st.slider("Weekly Side-Quest Activities (Hours)", 0, 10, 2)
+            counsel_input = st.selectbox("Sought Neural Psych Counseling Before?", options=["No", "Yes"])
+            stress_level = st.slider("🔥 Live Core System Stress Index", 0, 100, 60)
+
+        # Map interior variables based on stress levels
+        if stress_level >= 75: mh_input = "Depressed"
+        elif stress_level >= 45: mh_input = "Stressed"
+        elif stress_level >= 15: mh_input = "Good"
+        else: mh_input = "Excellent"
 
         g_encoded = 1 if gender_input == "Male" else 0
         s_encoded = 0 if stage_input == "Lowerlevel" else (1 if stage_input == "MiddleSchool" else 2)
@@ -117,77 +128,111 @@ try:
         counsel_encoded = 1 if counsel_input == "Yes" else 0
 
         st.markdown("---")
+        
+        # Calculate dynamic survival rate based on mathematical weights
+        survival_rate = int(((attendance * 0.35) + (visited_resources * 0.25) + (study_hours * 3.5) + (100 - stress_level) * 0.25))
+        survival_rate = max(5, min(100, survival_rate)) # Lock between 5% and 100%
+
+        # --- 🔥 NEW GAMIFIED RPG SURVIVAL HEALTH BAR ---
+        st.markdown(f"### 🔋 Academic Survival Energy: `{survival_rate}%`")
+        if survival_rate >= 75:
+            st.progress(survival_rate / 100) # Standard blue/green progress bar
+        elif survival_rate >= 40:
+            st.warning("⚠️ Warning: System Energy Depleting. Cognitive drag detected.")
+            st.progress(survival_rate / 100)
+        else:
+            st.error("🚨 CRITICAL ALERT: SYSTEM COLLAPSE IN BOUNDS. INSUFFICIENT RETENTION POWER.")
+            st.progress(survival_rate / 100)
+
+        # Run Prediction Inference
         input_data = np.array([[g_encoded, s_encoded, raised_hands, visited_resources, announcements, discussion, study_hours, sleep_time, attendance, extracurriculars, mh_encoded, counsel_encoded]])
         prediction = model.predict(input_data)[0]
         
-        cx1, cx2 = st.columns([2, 1])
-        with cx1:
-            st.markdown("### 📊 Live Evaluation Inference Output")
-            if prediction == 'H':
-                st.markdown('<div class="report-card" style="border-left-color: #10B981;"><h3 style="color: #10B981;">🏆 Predicted Category: HIGH PERFORMANCE (H)</h3><p><b>Diagnostic:</b> Outstanding behavioral profile. Low burnout risk. High persistence levels found.</p></div>', unsafe_allow_html=True)
-            elif prediction == 'M':
-                st.markdown('<div class="report-card" style="border-left-color: #3B82F6;"><h3 style="color: #3B82F6;">📊 Predicted Category: MEDIUM PERFORMANCE (M)</h3><p><b>Diagnostic:</b> Stable habits. Student responds well to standard institutional timelines. Maintain current tracking loops.</p></div>', unsafe_allow_html=True)
-            else:
-                st.markdown('<div class="report-card" style="border-left-color: #EF4444;"><h3 style="color: #EF4444;">🚨 Predicted Category: CRITICAL RISK PROFILE (L)</h3><p><b>Diagnostic:</b> Red Alert! Psychological fatigue matched with baseline engagement drops. Immediate mentor support loops recommended.</p></div>', unsafe_allow_html=True)
-        with cx2:
-            fig_imp, ax_imp = plt.subplots(figsize=(5, 3))
-            importances = model.feature_importances_
-            indices = np.argsort(importances)[-4:]
-            ax_imp.barh([features[i] for i in indices], importances[indices], color='#4F46E5')
-            ax_imp.set_title("Live Core Feature Driver Weights", fontsize=10)
-            st.pyplot(fig_imp)
-
-    # ==================== TAB 2: FREE INTERACTIVE LLAMA-3 AI AGENT ====================
-    with tab2:
-        st.subheader("🤖 Meta Llama-3 Autonomous Academic Expert Agent")
-        st.write("This Agent leverages Meta's Llama-3 NLP cluster architecture to run real-time student telemetry insights.")
+        st.markdown(" ")
+        st.markdown("### 🚨 Live Threat Matrix Analysis")
         
-        user_query = st.text_input("💬 Query the Autonomous Llama Node:", placeholder="e.g., 'How does sleep deprivation impact academic performance?'...")
+        # Blinking / Colorful Cyber Alerts based on outputs
+        if prediction == 'H':
+            st.markdown(f'<div class="threat-safe"><h3>✅ THREAT STATUS: ZERO THREAT (Class H Profile)</h3><p>Survival Core optimal. Academic matrix values are completely self-sustaining. Threat index: Low.</p></div>', unsafe_allow_html=True)
+        elif prediction == 'M':
+            st.markdown(f'<div class="threat-warning"><h3>⚠️ THREAT STATUS: MODERATE DRAG (Class M Profile)</h3><p>System stabilizing on baseline limits. Student holds steady operations but lacks breakout power vectors.</p></div>', unsafe_allow_html=True)
+        else:
+            st.markdown(f'<div class="threat-critical"><h3>🚨 THREAT STATUS: CRITICAL RISK MATRIX OVERLOAD (Class L Profile)</h3><p>EMERGENCY ALERT: High cognitive load ({stress_level}/100 Stress Index) matched with a drop in attendance has breached retention thresholds. Deploying immediate counselor overrides.</p></div>', unsafe_allow_html=True)
+
+        # ==================== 🔥 DYNAMIC REAL-TIME TIPS ENGINE ====================
+        st.markdown("---")
+        st.markdown("### 💡 AI System Remedial Protocols & Hacks")
+        
+        tx1, tx2 = st.columns(2)
+        with tx1:
+            st.markdown("<h4 style='color:#f87171;'>🧠 Stress, Tension & Burnout Diagnostics</h4>", unsafe_allow_html=True)
+            if stress_level >= 75:
+                st.markdown("""
+                <div class="cyber-card" style="border-color:#ef4444;">
+                    <b>🛑 5-4-3-2-1 Grounding Overdrive:</b> Panic state ko terminate karne ke liye: Instant apne visual domain mein 5 objects track karo, 4 textures touch karo, 3 auditory frequencies suno, aur 1 sensory taste recall karo. Dimaag panic mode se instantly exit kar jayega.
+                </div>
+                <div class="cyber-card" style="border-color:#ef4444;">
+                    <b>🫁 Tactical Box Breathing (4-4-4-4):</b> 4 sec saans andar, 4 sec system lock (hold), 4 sec complete dump (release), aur 4 sec blank space. Sub-conscious cortisol level instant crash hoga.
+                </div>
+                """, unsafe_allow_html=True)
+            elif stress_level >= 45:
+                st.markdown("""
+                <div class="cyber-card" style="border-color:#f97316;">
+                    <b>🎵 Alpha Wave Brain Entrainment:</b> 432Hz Sound loop frequencies earphone par chalao. Padhai ke dauran aane wale racing thoughts ka connection break ho jayega.
+                </div>
+                <div class="cyber-card" style="border-color:#f97316;">
+                    <b>☕ Caffeine Lockdown Protocol:</b> High anxiety blocks mein chai/coffee strictly terminate kar do. Nervous system ko trigger se bachana maximum priority hai.
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown("<p style='color:#10b981;'>✅ System wellness loop secure. No physiological interventions required at this stamp.</p>", unsafe_allow_html=True)
+                
+        with tx2:
+            st.markdown("<h4 style='color:#60a5fa;'>📚 Advanced Neuro-Study Architectures</h4>", unsafe_allow_html=True)
+            if stress_level >= 50:
+                st.markdown("""
+                <div class="cyber-card" style="border-color:#a855f7;">
+                    <b>⏱️ Ultra-Short Pomodoro (20-5 Blocks):</b> Memory overloading se bachne ke liye bade syllabus target ko delete karo. Sirf 20 mins hyper-focus karo aur 5 mins screenless reset walk block execute karo.
+                </div>
+                <div class="cyber-card" style="border-color:#a855f7;">
+                    <b>🎯 Active Recall Infiltration:</b> Notes baar-baar padhna band karo. Blank paper uthao aur dimaag par pressure dalo ki last unit se kya-kya save hai. Forced retrieval pattern memory ko fast permanent banata hai.
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown("""
+                <div class="cyber-card" style="border-color:#3b82f6;">
+                    <b>💡 Feynman Explanatory Protocol:</b> Jo complex topics padhe hain, use imagine karo ki kisi 5 saal ke bachhe ko sikha rahe ho. Words simple hote hi complex equations dimaag mein crack ho jayengi.
+                </div>
+                <div class="cyber-card" style="border-color:#3b82f6;">
+                    <b>🗺️ Spaced Repetition Array Logic:</b> Aaj ka topic exact 24 ghante, fir 3 din, aur fir 7 din baad re-verify (revise) karo. Information neural pathways mein hardcode ho jayegi.
+                </div>
+                """, unsafe_allow_html=True)
+
+    # ==================== TAB 2: TERMINAL STYLE LLAMA CHAT ====================
+    with tab2:
+        st.subheader("🖥️ Autonomous Cybernetic Llama Node Console")
+        user_query = st.text_input("📡 Input Command / Prompt Query:", placeholder="sys_query: enter query parameter here...")
         
         if user_query:
-            st.markdown(f'<div class="chat-user"><b>You:</b> {user_query}</div>', unsafe_allow_html=True)
+            # Hacker Style Terminal UI Blocks
+            st.markdown(f'<div class="cyber-terminal"><b>root@ai_agent_core:~#</b> user_request --token="{user_query}"</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="cyber-terminal"><b>[STATUS]:</b> Scanning data matrix nodes... Analysing internal target variance layers...</div>', unsafe_allow_html=True)
             
-            # Live Agent Operational Thoughts Display
-            with st.expander("⚙️ View Agent Operational Thought Process (Reasoning Engine)", expanded=True):
-                thought_placeholder = st.empty()
-                thought_placeholder.markdown("<div class='thought-box'>[LLAMA_NODE 1]: Initializing tokenized weights... Hooking into Random Forest model parameters...</div>", unsafe_allow_html=True)
-                time.sleep(0.4)
-                thought_placeholder.markdown("<div class='thought-box'>[LLAMA_NODE 2]: Mapping query indices across Stressed/Depressed behavioral metrics... Analyzing telemetry matrix coefficients...</div>", unsafe_allow_html=True)
-                time.sleep(0.4)
-                thought_placeholder.markdown("<div class='thought-box'>[LLAMA_NODE 3]: Broadcasting payload routing token to free inference clusters... Pipeline executed.</div>", unsafe_allow_html=True)
-            
-            # 🌐 FREE SERVERLESS INFERENCE API CALL (Meta Llama-3-8B-Instruct)
             API_URL = "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct"
-            # Standard system-level prompt injection
-            system_prompt = f"<|system|>\nYou are an elite Academic Retention AI Agent. Answer the following student analytics question crisply, professionally, and use strict logical reasoning based on data science: {user_query}\n<|user|>\nAnswer:"
+            system_prompt = f"<|system|>\nYou are an elite cybernetic Student Retention AI Engine. Answer this query analytically using high data science terminology: {user_query}\n<|user|>\nAnswer:"
             
             try:
-                # Making a free public API call to HuggingFace pipeline
-                response = requests.post(API_URL, json={"inputs": system_prompt, "parameters": {"max_new_tokens": 200, "temperature": 0.7}}, timeout=10)
+                response = requests.post(API_URL, json={"inputs": system_prompt, "parameters": {"max_new_tokens": 150, "temperature": 0.7}}, timeout=8)
                 res_json = response.json()
-                
-                # Parsing the raw model text block cleanly
-                if isinstance(res_json, list) and "generated_text" in res_json[0]:
-                    full_text = res_json[0]["generated_text"]
-                    bot_text = full_text.split("Answer:")[-1].strip()
-                else:
-                    raise Exception("Model Loading/Warming Up")
+                bot_text = res_json[0]["generated_text"].split("Answer:")[-1].strip()
             except Exception:
-                # Fallback smart matcher if external model cluster takes time to warm up
-                bot_text = "🤖 **Llama Agent (Analytical Backup):** The core pipeline has parsed your vector request successfully. "
-                query_low = user_query.lower()
-                if "stress" in query_low or "sleep" in query_low:
-                    bot_text += "Analytical charts verify that Stressed states create sleep distortion cycles (<6 hours). This pattern heavily reduces LMS 'Portal Clicks' and forces an academic classification drop."
-                elif "attendance" in query_low:
-                    bot_text += "Attendance tracking holds an apex structural correlation coefficient. Dropping below 70% bounds the network weights straight into Category L (High Dropout Risk)."
-                else:
-                    bot_text += "LMS engagement data shows a direct positive trajectory. Sustaining over 65+ clicks and 5+ hours of self-study ensures continuous stability in Category H classification parameters."
+                bot_text = "System telemetry override active. High stress patterns intercepted. Neural optimization route: Execute micro-learning modules, expand platform data mining, and activate structural group protocols immediately to mitigate cognitive drop risks."
 
-            st.markdown(f'<div class="chat-bot">✨ **Llama AI Agent Response:**\n\n{bot_text}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="cyber-terminal" style="border-left-color:#3b82f6; margin-top:10px;"><b style="color:#10b981;">[LLAMA_CORE_RESPONSE]:</b><br><br>{bot_text}</div>', unsafe_allow_html=True)
 
-    # ==================== TAB 3: ANALYTICS CORE ====================
+    # ==================== TAB 3: VISUALIZATIONS ====================
     with tab3:
-        st.subheader("📊 Statistical Analytics & Distribution Matrix")
+        st.subheader("📊 Core Data Visualizations")
         c1, c2 = st.columns(2)
         with c1:
             fig_bar, ax_bar = plt.subplots(figsize=(6, 4))
@@ -197,12 +242,6 @@ try:
             fig_scatter, ax_scatter = plt.subplots(figsize=(6, 4))
             sns.scatterplot(x='StudyHours', y='Attendance', hue='Class', data=df, palette='Set1', alpha=0.7, ax=ax_scatter)
             st.pyplot(fig_scatter)
-            
-        st.markdown("---")
-        fig_heat, ax_heat = plt.subplots(figsize=(14, 6))
-        numeric_cols = ['raisedhands', 'VisITedResources', 'AnnouncementsView', 'Discussion', 'StudyHours', 'SleepTime', 'Attendance', 'Extracurriculars', 'MH_encoded', 'Counsel_encoded']
-        sns.heatmap(df[numeric_cols].corr(), annot=True, cmap='coolwarm', fmt=".2f", ax=ax_heat, linewidths=0.5)
-        st.pyplot(fig_heat)
 
 except FileNotFoundError:
     st.error("Fatal Error: 'AI-Data.csv' file missing in root directory.")
