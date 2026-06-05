@@ -1,6 +1,7 @@
-pandas
-seaborn
-matplotlib
+google-generativeai
 scikit-learn
+pandas
 numpy
-thefuzz
+matplotlib
+seaborn
+streamlit
