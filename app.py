@@ -9,7 +9,7 @@ from sklearn.preprocessing import LabelEncoder
 import requests
 import time
 
-# Page Configuration - Cyber Dashboard Look
+# Page Configuration - Hacker Theme Look
 st.set_page_config(page_title="Student Academic Analytics Platform", layout="wide", page_icon="⚡")
 
 # Hacker/Cyberpunk Custom Premium CSS Style Grid
@@ -28,12 +28,13 @@ st.markdown("""
     .threat-warning { background: #451a03; border: 2px solid #f97316; color: #ffedd5; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(249,115,22,0.2); }
     .threat-safe { background: #064e3b; border: 2px solid #10b981; color: #d1fae5; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(16,185,129,0.2); }
     
-    .cyber-terminal { background-color: #020617; border-left: 5px solid #10b981; padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace; color: #38bdf8; font-size: 14px; }
+    .cyber-terminal { background-color: #020617; border-left: 5px solid #10b981; padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace; color: #38bdf8; font-size: 14px; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
+    .log-stream { font-family: 'Courier New', monospace; color: #a7f3d0; font-size: 12px; background-color: #020617; padding: 12px; border-radius: 6px; border: 1px solid #1e293b; height: 120px; overflow-y: auto; line-height: 1.6; }
     </style>
     """, unsafe_allow_html=True)
 
 st.title("⚡ STUDENT ACADEMIC ANALYTICS & WELLNESS PLATFORM")
-st.markdown("<span style='color:#94a3b8;'>Advanced Prescriptive Engine combining Cognitive Load Tracking, Bio-Wellness Telemetry, and RGPV Subject Difficulty Matrix.</span>", unsafe_allow_html=True)
+st.markdown("<span style='color:#94a3b8;'>Advanced Prescriptive Engine combining Cognitive Load Tracking, Bio-Wellness Telemetry, and Dynamic System Log Matrices.</span>", unsafe_allow_html=True)
 st.markdown("---")
 
 @st.cache_data
@@ -134,7 +135,7 @@ try:
         mh_encoded = list(le_mh.classes_).index(mh_input)
         counsel_encoded = 1 if counsel_input == "Yes" else 0
 
-        # ==================== 🔥 ADVANCED MATHEMATICAL MATRIX ALGORITHMS ====================
+        # ==================== ADVANCED MATHEMATICAL MATRIX ALGORITHMS ====================
         # 1. CGPA/GPA Predictor Formula
         base_gpa = ((attendance * 0.3) + (raised_hands * 0.2) + (visited_resources * 0.2) + (study_hours * 4.0)) / 15
         predicted_gpa = round(max(4.0, min(10.0, base_gpa + (assignment_score * 0.015) - (stress_index * 0.01))), 2)
@@ -221,7 +222,7 @@ try:
         with r3_c3:
             st.markdown(f"<div class='feature-card' style='border-color:#14b8a6;'><span class='feature-title'>📈 Delta Improvement Potential</span><div class='feature-value' style='color:#2dd4bf;'>+{improvement_potential}%</div></div>", unsafe_allow_html=True)
         with r3_c4:
-            st.markdown(f"<div class='feature-card' style='border-color:#6366f1;'><span class='feature-title'>⏳ Habits Consistency Score</span><div class='feature-value' style='color:#818cf8;'>{study_consistency}/100</div></div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='feature-card' style='border-color:#6366f1;'><span class='feature-title'>🔒 Habits Consistency Score</span><div class='feature-value' style='color:#818cf8;'>{study_consistency}/100</div></div>", unsafe_allow_html=True)
 
         # Run Baseline Model Prediction
         input_data = np.array([[g_encoded, s_encoded, raised_hands, visited_resources, announcements, discussion, study_hours, sleep_time, attendance, extracurriculars, mh_encoded, counsel_encoded]])
@@ -259,41 +260,34 @@ try:
             else:
                 st.info(f"📈 **Prescriptive Optimization Strategy for {target_subject}:** To close the delta gap to reach **{target_cgpa} CGPA**, execute parameter hacks: Push Attendance past **86%**, scale Daily Study Blocks to **+2 hours**, and ensure Assignment Submission matches **90%+** accuracy.")
 
-        # Dynamic Science Relief Deck based on current metrics triggers
+        # --- 🔥 NEW SUPER FEATURE: DYNAMIC CYBER PLATFORM LOG SCREEN ---
         st.markdown("---")
-        st.markdown("### 💡 AI System Remedial Protocols & Hacks")
-        tx1, tx2 = st.columns(2)
-        with tx1:
-            st.markdown("<h4 style='color:#f87171;'>🧠 Anxiety, Tension & Burnout Diagnostics</h4>", unsafe_allow_html=True)
-            if stress_index >= 50:
-                st.markdown("""
-                <div class="feature-card" style='text-align:left; border-color:#ef4444; margin-bottom:10px;'>
-                    <b>🛑 5-4-3-2-1 Grounding Method:</b> Sensory system bypass trigger: Instant field mein 5 patterns track karo, 4 objects touch karo, 3 auditory noise frequencies isolated suno, aur 1 sensory taste memory trace karo. Sudden anxiety loops completely smash ho jayenge.
-                </div>
-                <div class="feature-card" style='text-align:left; border-color:#ef4444;'>
-                    <b>🫁 Box Breathing Engine (4-4-4-4):</b> 4 sec saans inhale, 4 sec core lock (hold), 4 sec full exhaust release, aur 4 sec total system empty block. Sub-conscious cortisol rush runtime par crash ho jayega.
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("<p style='color:#10b981;'>✅ Psychological Homeostasis within optimal parameters. No stress containment needed.</p>", unsafe_allow_html=True)
-        with tx2:
-            st.markdown("<h4 style='color:#60a5fa;'>📚 Advanced Neuro-Study Architectures</h4>", unsafe_allow_html=True)
-            if stress_index >= 50:
-                st.markdown("""
-                <div class="feature-card" style='text-align:left; border-color:#a855f7; margin-bottom:10px;'>
-                    <b>⏱️ Ultra-Short Pomodoro (20-5 Blocks):</b> Brain load saturation bypass route: Complete engineering topics mitao, sub-blocks ko component level par todein. Only 20 mins hyper-focus work cycle aur 5 mins safe screenless walking rest break setup.
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("""
-                <div class="feature-card" style='text-align:left; border-color:#3b82f6;'>
-                    <b>💡 Feynman Explanatory Protocol:</b> Jo complex engineering calculations padhi hain, use simplify karke khud ko ya kisi non-tech profile person ko base parameters par decode karo. Simple variables hote hi neural pathways locks reset ho jayenge.
-                </div>
-                """, unsafe_allow_html=True)
+        st.markdown("### 🖥️ Live Core Pipeline Execution Telemetry Logs")
+        
+        # Runtime custom string logging injection simulation
+        log_1 = f"[COMPUTING]: Running Random Forest Inference array against {target_subject} profile..."
+        log_2 = f"[TELEMETRY]: Tracking {attendance}% Attendance weights & {study_hours}h Study load coefficients..."
+        log_3 = f"[METRIC EVAL]: System generated Backlog Probability at {backlog_prob}% | Exam Readiness Score at {readiness_score}/100."
+        if stress_index >= 65:
+            log_4 = f"[CRITICAL WARN]: Cortisol/Stress Node spike detected ({stress_index}/100). Restructuring Burnout Risk matrix to Critical..."
+        else:
+            log_4 = "[HEALTH CHECK]: Bio-wellness telemetry patterns stable. Stress constraints within control parameters."
+        log_5 = f"[LOCK]: Execution pipeline completion. Predicted GPA locked at {predicted_gpa}. Diagnostics streaming stable."
+        
+        st.markdown(f"""
+        <div class="log-stream">
+            &gt; {log_1}<br>
+            &gt; {log_2}<br>
+            &gt; {log_3}<br>
+            &gt; <span style='color:#f87171;'>{log_4}</span><br>
+            &gt; <span style='color:#38bdf8;'>{log_5}</span>
+        </div>
+        """, unsafe_allow_html=True)
 
     # ==================== TAB 2: META LLAMA INTERACTIVE NODE ====================
     with tab2:
         st.subheader("🖥️ Autonomous Cybernetic Llama-3 Node Console")
+        st.write("Ask our real-time LLM core cluster anything regarding structural study workflows or anxiety-release protocols.")
         user_query = st.text_input("📡 Input Command Input / Target Query Token:", placeholder="sys_query: enter query like 'how to clear TOC backlog' or 'explain automata risk'...")
         
         if user_query:
