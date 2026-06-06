@@ -112,8 +112,21 @@ try:
 
         with col2:
             st.markdown("<h5 style='color:#10b981;'>🏃 Lifestyle Habits & Well-being Attributes</h5>", unsafe_allow_html=True)
-            study_hours = st.slider("Daily Continuous Self-Study Blocks (Hours)", 0, 15, 5)
-            sleep_time = st.slider("Sleep Cycle Recovery Duration (Hours)", 4, 12, 7)
+            
+            # --- FIXED REALISTIC 24-HOUR ROUTINE GATEWAY ---
+            study_hours = st.slider("Daily Continuous Self-Study Blocks (Hours)", 0, 14, 5, help="Maximum realistic self-study allocation capped to 14 hours.")
+            
+            # Mathematical calculation to keep remaining lifestyle metrics bound strictly below 24h limits
+            # Reserving a clean 2-hour buffer layer for essential core chores (eating, travel, hygiene)
+            max_allowed_sleep = max(4, 24 - study_hours - 2)
+            
+            sleep_time = st.slider("Sleep Cycle Recovery Duration (Hours)", 4, int(max_allowed_sleep), 7, help="Bound dynamically by your active Study Hours parameters to preserve 24h mathematical validity.")
+            
+            # Active status visual feedback on the control desk matrix
+            allocated_routine_time = 24 - (study_hours + sleep_time)
+            st.markdown(f"<span style='color:#94a3b8; font-size:12px; font-weight:600;'>📊 Current Routine Frame: Study {study_hours}h | Sleep {sleep_time}h | Essential Buffer/Other {allocated_routine_time}h</span>", unsafe_allow_html=True)
+            st.markdown("<br>", unsafe_allow_html=True)
+            
             attendance = st.slider("Verified Academic Attendance Record (%)", 0, 100, 80)
             extracurriculars = st.slider("Weekly Co-Curricular Allocation (Hours)", 0, 10, 2)
             counsel_input = st.selectbox("Prior Professional Academic Counseling?", options=["No", "Yes"])
@@ -244,7 +257,7 @@ try:
         r5_4.markdown(f"<div class='feature-card' style='border-color:#eab308;'><span class='feature-title'>🎯 Target Goal Likelihood</span><div class='feature-value' style='color:#facc15;'>{goal_prob}%</div></div>", unsafe_allow_html=True)
 
         input_data = np.array([[g_encoded, s_encoded, raised_hands, visited_resources, announcements, discussion, study_hours, sleep_time, attendance, extracurriculars, mh_encoded, counsel_encoded]])
-        prediction = model.fit(X_train, y_train).predict(input_data)[0]
+        prediction = model.predict(input_data)[0]
 
         # Performance Clustering Status Blocks (Completely Standard Formalized)
         st.markdown(" ")
