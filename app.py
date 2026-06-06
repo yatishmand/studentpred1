@@ -109,8 +109,31 @@ try:
             discussion = st.slider("Active Discussion Forum Participation Density", 0, 100, 50)
             assignment_score = st.slider("Assignment Evaluation Completion Rate (%)", 0, 100, 75)
             
+            # --- EXTENDED MULTI-DISCIPLINARY SUBJECT PIPELINE ---
             st.markdown("<h5 style='color:#fb7185;'>🎯 Target Performance Milestone</h5>", unsafe_allow_html=True)
-            target_subject = st.selectbox("Select Target Analytics Track", options=["Theory of Computation (TOC)", "Database Management (DBMS)", "Computer Networks (CN)", "Design & Analysis of Algorithms (DAA)"])
+            
+            subject_options = [
+                # Engineering & Tech Tracks
+                "Engineering: Theory of Computation (TOC)", "Engineering: Design & Analysis of Algorithms (DAA)", 
+                "Engineering: Database Management Systems (DBMS)", "Engineering: Computer Networks (CN)", 
+                "Engineering: Operating Systems (OS)", "Engineering: Machine Learning Pipelines", 
+                "Engineering: Data Science Architecture", "Engineering: Cyber Security & Cryptography", 
+                "Engineering: Cloud Computing Frameworks", "Engineering: Compiler Design Matrices",
+                # Commerce & Management Tracks
+                "Commerce: Advanced Corporate Accounting", "Commerce: Financial Risk Management & Fintech", 
+                "Commerce: Macroeconomic Policy Analysis", "Commerce: Strategic Business Management", 
+                "Commerce: Digital Marketing Analytics", "Commerce: Econometrics & Quantitative Data", 
+                "Commerce: International Trade & Logistics", "Commerce: Investment & Portfolio Analysis", 
+                "Commerce: Auditing & Assurance Systems", "Commerce: Operational Cost Management",
+                # Biological & Life Sciences Tracks
+                "Bio-Science: Molecular Genetics & CRISPR", "Bio-Science: Cellular Immunology", 
+                "Bio-Science: Advanced Biochemistry", "Bio-Science: Clinical Microbiology", 
+                "Bio-Science: Neuroanatomy & Brain Mapping", "Bio-Science: Plant Physiology & Biotech", 
+                "Bio-Science: Pharmacokinetics & Drug Analytics", "Bio-Science: Structural Bioinformatics", 
+                "Bio-Science: Pathology & Disease Mechanisms", "Bio-Science: Genetic Engineering Mappings"
+            ]
+            
+            target_subject = st.selectbox("Select Target Analytics Track", options=subject_options)
             target_cgpa = st.slider("Set Desired Target Cumulative CGPA", 4.0, 10.0, 8.5, step=0.1)
 
         with col2:
@@ -163,7 +186,7 @@ try:
         confidence_score = max(5, min(100, int((readiness_score * 0.6) + (study_consistency * 0.4) - (backlog_prob * 0.1))))
         syllabus_coverage = max(15, min(100, int((study_hours * 5) + (assignment_score * 0.3) + (attendance * 0.1))))
 
-        credit_weight = 4 if "TOC" in target_subject or "DAA" in target_subject else 3
+        credit_weight = 4 if "TOC" in target_subject or "DAA" in target_subject or "Corporate" in target_subject or "Genetics" in target_subject else 3
         credit_integrity = round((attendance * 0.01) * credit_weight * (predicted_gpa / 10), 2)
 
         internal_marks = round(min(20.0, (raised_hands * 0.04) + (visited_resources * 0.04) + (assignment_score * 0.12)), 1)
@@ -178,19 +201,27 @@ try:
         placement_gateway = "PASSED (Criteria Eligible)" if attendance >= 75 and predicted_gpa >= 6.5 else "FAILED (Below Gateway Benchmark)"
 
         career_ratio = int((study_consistency * 0.6) + (visited_resources * 0.4) - (extracurriculars * 4))
-        career_inclination = "Technical (Core Engineering/R&D)" if career_ratio >= 40 else "Management (Product/Operations Management)"
+        
+        # Split career logic according to active tracking stream
+        if "Engineering" in target_subject:
+            career_inclination = "Technical (Core Engineering/R&D)" if career_ratio >= 45 else "Management (Product Operations)"
+        elif "Commerce" in target_subject:
+            career_inclination = "Quantitative Analytics & Fintech" if career_ratio >= 45 else "Corporate Auditing & Consulting"
+        else:
+            career_inclination = "Biotech Lab Research & Genomic R&D" if career_ratio >= 45 else "Clinical Health & Administration"
 
         study_efficiency = round((visited_resources + assignment_score) / max(1, study_hours * 2), 1)
         weekend_burn = int((100 - study_consistency) * 0.6 + (stress_index * 0.4))
         routine_balance = max(10, min(100, int(100 - abs(8 - sleep_time)*5 - abs(5 - study_hours)*4 - (stress_index * 0.2))))
         recency_factor = int(max(1, 30 - (study_consistency * 0.28)))
 
-        if raised_hands >= 60 and study_hours >= 6:
-            strength_sub, weakness_sub = "Theory of Computation (TOC)", "Design & Analysis of Algorithms (DAA)"
-        elif attendance >= 80 and assignment_score >= 75:
-            strength_sub, weakness_sub = "Database Management (DBMS)", "Theory of Computation (TOC) Automata Structure"
+        # Dynamic mapping of strengths based on stream
+        if "Engineering" in target_subject:
+            strength_sub, weakness_sub = "Systems Computational Modeling", "Algorithmic Complexity Core"
+        elif "Commerce" in target_subject:
+            strength_sub, weakness_sub = "Statistical Econometrics", "Taxation & Legal Compliance Audit"
         else:
-            strength_sub, weakness_sub = "Computer Networks (CN)", "Theory of Computation (TOC) Core Machine Logic"
+            strength_sub, weakness_sub = "Molecular Assays & Sequencing", "Structural Bio-informatics Data"
 
         if readiness_score >= 75 and study_consistency >= 70: trend_tag, trend_color = "🚀 IMPROVING STEADILY", "#10b981"
         elif readiness_score <= 45 or attendance <= 65: trend_tag, trend_color = "🚨 CRITICAL DECLINE IN MATRIX", "#ef4444"
@@ -275,27 +306,33 @@ try:
             else:
                 st.info(f"📈 **Prescriptive Optimization Strategy for {target_subject}:** To close the delta gap to reach **{target_cgpa} CGPA**, execute parameter adjustments: Push Attendance past **86%**, scale Daily Study Blocks to **+2 hours**, and ensure Assignment Submission matches **90%+** accuracy.")
 
-    # ==================== TAB 2: FIXED HIGH-FIDELITY LOCAL COUNSELOR BOT ====================
+    # ==================== TAB 2: ADVANCED HIGH-FIDELITY DYNAMIC CHAT NODES ====================
     with tab2:
         st.subheader("🖥️ AI Academic Strategy Interface Console")
         st.write("Query the integrated diagnostic system regarding engineering curriculum strategy timelines, roadmap optimizations, or workflow balance protocols.")
-        user_query = st.text_input("💬 Input Command Input / Target Query Token:", placeholder="sys_query: enter keyword like 'toc', 'exam', 'placement', 'gpa', 'study'...")
+        user_query = st.text_input("💬 Input Command Input / Target Query Token:", placeholder="sys_query: type anything regarding exam, gpa, streams, study, placement...")
         
         if user_query:
-            st.markdown(f'<div class="cyber-terminal" style="border-left-color: #2563eb;"><b>[ST_REQUEST_LOG]:</b> Parsing raw input token matrices against analytics profile... Deployed Subject: {target_subject}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="cyber-terminal" style="border-left-color: #2563eb;"><b>[ST_REQUEST_LOG]:</b> Parsing raw input token matrices against analytics profile... Deployed Domain: {target_subject}</div>', unsafe_allow_html=True)
             
             q_clean = user_query.lower()
             
-            # --- ADVANCED DYNAMIC TEXT ENGINE (LOCAL PROCESSING LOOP) ---
+            # --- TRUE CROSS-DISCIPLINARY KEYWORD MATCHING ENGINE ---
             if "toc" in q_clean or "theory of computation" in q_clean or "automata" in q_clean:
-                bot_text = f"⚙️ **TOC PIPELINE ANALYSIS:** To excel in **Theory of Computation**, structural abstraction is required. Your custom metrics indicate a study velocity of {study_hours} hours. Strategy: 1. Dedicate 40% of tracking time to DFA/NFA closure properties. 2. Map structural transitions using visual Mealy/Moore matrix workflows. 3. Counter Pumping Lemma complexities through systematic contradiction frameworks. Focus on core machine state logic to optimize your {predicted_gpa} GPA framework."
+                bot_text = f"⚙️ **TOC ENGINE COGNITION:** Executing computational strategy mapping for your profile. Your active workload balance shows {study_hours}h self-study metrics. Strategy: 1. Dedicate 40% of tracking blocks to Finite Automata closures & regular language transitions. 2. Map transition tables structurally to neutralize Mealy/Moore matrix confusion loops. 3. Target the structural pumping lemma constraints using systematic contradiction matrices."
             
+            elif "bio" in q_clean or "genetics" in q_clean or "microbiology" in q_clean or "science" in q_clean:
+                bot_text = f"🧬 **BIO-SCIENCE ANALYTICS CORE:** Custom roadmap initialized for current track: **{target_subject}**. To support a projected GPA of {predicted_gpa}, structure your data integration pipelines around: 1. Visual pathways visualization for enzymatic molecular kinetics. 2. Quantitative dataset clustering when modeling bioinformatics gene sequencing records. 3. Focus on strengthening core domain metrics: **{strength_sub}**."
+
+            elif "commerce" in q_clean or "accounting" in q_clean or "finance" in q_clean or "audit" in q_clean:
+                bot_text = f"📈 **COMMERCE STRATEGY INTERFACE:** System status diagnostics active for **{target_subject}**. Financial and cost vectors require quantitative consistency layers. Strategy: 1. Boost workflow consistency parameters beyond 85% to optimize balance sheet verification simulations. 2. Balance the analytical portfolio models against real-time micro-study blocks ({study_hours}h active velocity). 3. Prioritize mitigations for the *{weakness_sub}* focus block."
+
             elif "exam" in q_clean or "readiness" in q_clean or "prepare" in q_clean or "sessional" in q_clean:
-                bot_text = f"📝 **EXAM PERFORMANCE MATRIX ENGINE:** Your active Exam Readiness index is evaluated at **{readiness_score}/100**. Execution Roadmap: 1. Address the {weakness_sub} focus block immediately. 2. Since your assignment submission metrics are at {assignment_score}%, run past 3-year sessional trend parameters. 3. Do not compromise your current rest cycle ({sleep_time} Hours) within 48 hours of evaluation cycles to prevent severe cognitive load drift errors."
+                bot_text = f"📝 **EXAM PERFORMANCE MATRIX ENGINE:** Your active Exam Readiness index is evaluated at **{readiness_score}/100**. Execution Roadmap: 1. Address the {weakness_sub} focus block immediately. 2. Since your assignment submission metrics are at {assignment_score}%, run high-frequency past sessional trends. 3. Do not compromise your current rest cycle ({sleep_time} Hours) within 48 hours of evaluation cycles to prevent severe cognitive load drift errors."
                 
             elif "placement" in q_clean or "career" in q_clean or "jobs" in q_clean or "company" in q_clean:
                 if "PASSED" in placement_gateway:
-                    bot_text = f"🚀 **PLACEMENT ARCHITECTURE CORE:** Status verified as **ELIGIBLE**. Profile alignment shows a solid orientation towards **{career_inclination}**. Strategic Advice: Capitalize on your high curricular credit metrics ({credit_integrity} pts). Target enterprise system architectures, push engineering codes to GitHub repositories, and leverage your active peer collaboration matrix ({peer_interaction}%) for mock mock-interview sprints."
+                    bot_text = f"🚀 **PLACEMENT ARCHITECTURE CORE:** Status verified as **ELIGIBLE**. Profile alignment shows a solid orientation towards **{career_inclination}**. Strategic Advice: Capitalize on your high curricular credit metrics ({credit_integrity} pts). Target enterprise system architectures, push domain codes/case-studies to portfolio systems, and leverage your active peer collaboration matrix ({peer_interaction}%) for mock mock-interview sprints."
                 else:
                     bot_text = f"⚠️ **PLACEMENT RECOVERY PROTOCOL:** Action required! Your active metrics fall below institutional gateway standards. Urgent Strategy: 1. Systematically push overall GPA above the 6.5 cutoff baseline (Current projection: {predicted_gpa}). 2. Execute an absolute lock on your campus attendance matrix to cross 75% benchmarks (Current: {attendance}%). Re-run pipeline variables once parameters normalize."
                     
@@ -310,8 +347,8 @@ try:
                 bot_text = f"🧠 **COGNITIVE RISK ASSESSMENT:** Platform telemetry calculates a **Cognitive Fatigue Index of {cognitive_fatigue}%** with a Burnout Velocity of **{burnout_velocity}**. System diagnostics: Your sleep duration profile is locked at {sleep_time} hours against a {study_hours} hour study load. Advice: Avoid late-night workload variance adjustments. Stabilize your routine balance rating ({routine_balance}/100) by establishing strict operational study blocks to protect cognitive memory recency intervals."
                 
             else:
-                # High-gloss standard fallback logic that updates dynamically with active configurations
-                bot_text = f"📡 **DYNAMIC SYSTEM DIAGNOSTICS ACTIVE:** Request successfully mapped for track: **{target_subject}**. The Scikit-Learn validation trees suggest modifying your current parameters (Attendance: {attendance}%, Study Blocks: {study_hours}h) to match a stable trajectory. Recommended: Fragment complex engineering units into daily tasks, leverage active recall protocols for {strength_sub}, and maintain routine parity metrics to eliminate retention risks."
+                # Completely dynamic smart default fallback that pulls live structural parameters
+                bot_text = f"📡 **DYNAMIC SYSTEM DIAGNOSTICS ACTIVE:** Request successfully mapped for track: **{target_subject}**. The Scikit-Learn validation trees suggest modifying your current parameters (Attendance: {attendance}%, Study Blocks: {study_hours}h) to match a stable trajectory. Recommended: Fragment complex engineering/science units into daily tasks, leverage active recall protocols for **{strength_sub}**, and maintain routine parity metrics to eliminate retention risks."
 
             st.markdown(f'<div class="cyber-terminal" style="border-left-color:#10b981; margin-top:10px;"><b style="color:#38bdf8;">[AI_ADVISOR_RESPONSE]:</b><br><br>{bot_text}</div>', unsafe_allow_html=True)
 
