@@ -109,31 +109,56 @@ try:
             discussion = st.slider("Active Discussion Forum Participation Density", 0, 100, 50)
             assignment_score = st.slider("Assignment Evaluation Completion Rate (%)", 0, 100, 75)
             
-            # --- EXTENDED MULTI-DISCIPLINARY SUBJECT PIPELINE ---
+            # --- CASCADING STREAM & SUBJECT DICTIONARY CONFIGURATION ---
             st.markdown("<h5 style='color:#fb7185;'>🎯 Target Performance Milestone</h5>", unsafe_allow_html=True)
             
-            subject_options = [
-                # Engineering & Tech Tracks
-                "Engineering: Theory of Computation (TOC)", "Engineering: Design & Analysis of Algorithms (DAA)", 
-                "Engineering: Database Management Systems (DBMS)", "Engineering: Computer Networks (CN)", 
-                "Engineering: Operating Systems (OS)", "Engineering: Machine Learning Pipelines", 
-                "Engineering: Data Science Architecture", "Engineering: Cyber Security & Cryptography", 
-                "Engineering: Cloud Computing Frameworks", "Engineering: Compiler Design Matrices",
-                # Commerce & Management Tracks
-                "Commerce: Advanced Corporate Accounting", "Commerce: Financial Risk Management & Fintech", 
-                "Commerce: Macroeconomic Policy Analysis", "Commerce: Strategic Business Management", 
-                "Commerce: Digital Marketing Analytics", "Commerce: Econometrics & Quantitative Data", 
-                "Commerce: International Trade & Logistics", "Commerce: Investment & Portfolio Analysis", 
-                "Commerce: Auditing & Assurance Systems", "Commerce: Operational Cost Management",
-                # Biological & Life Sciences Tracks
-                "Bio-Science: Molecular Genetics & CRISPR", "Bio-Science: Cellular Immunology", 
-                "Bio-Science: Advanced Biochemistry", "Bio-Science: Clinical Microbiology", 
-                "Bio-Science: Neuroanatomy & Brain Mapping", "Bio-Science: Plant Physiology & Biotech", 
-                "Bio-Science: Pharmacokinetics & Drug Analytics", "Bio-Science: Structural Bioinformatics", 
-                "Bio-Science: Pathology & Disease Mechanisms", "Bio-Science: Genetic Engineering Mappings"
-            ]
+            # 1. Ask Category Stream First
+            target_stream = st.selectbox(
+                "Select Academic Stream Division", 
+                options=["Engineering & Technology", "Commerce & Banking", "Biological & Life Sciences", "MBA & Management Studies", "Humanities & Social Tracks"]
+            )
             
-            target_subject = st.selectbox("Select Target Analytics Track", options=subject_options)
+            # 2. Dynamic Field Subject Allocation Map
+            stream_subjects = {
+                "Engineering & Technology": [
+                    "Theory of Computation (TOC)", "Design & Analysis of Algorithms (DAA)", 
+                    "Database Management Systems (DBMS)", "Computer Networks (CN)", 
+                    "Operating Systems (OS)", "Machine Learning Pipelines", 
+                    "Data Science Architecture", "Cyber Security & Cryptography", 
+                    "Cloud Computing Frameworks", "Compiler Design Matrices"
+                ],
+                "Commerce & Banking": [
+                    "Advanced Corporate Accounting", "Financial Risk Management & Fintech", 
+                    "Macroeconomic Policy Analysis", "Strategic Business Management", 
+                    "Digital Marketing Analytics", "Econometrics & Quantitative Data", 
+                    "International Trade & Logistics", "Investment & Portfolio Analysis", 
+                    "Auditing & Assurance Systems", "Operational Cost Management"
+                ],
+                "Biological & Life Sciences": [
+                    "Molecular Genetics & CRISPR", "Cellular Immunology", 
+                    "Advanced Biochemistry", "Clinical Microbiology", 
+                    "Neuroanatomy & Brain Mapping", "Plant Physiology & Biotech", 
+                    "Pharmacokinetics & Drug Analytics", "Structural Bioinformatics", 
+                    "Pathology & Disease Mechanisms", "Genetic Engineering Mappings"
+                ],
+                "MBA & Management Studies": [
+                    "Organizational Behavior & HR", "Corporate Value Strategy", 
+                    "Supply Chain Logistics Operations", "Consumer Behavior Analytics", 
+                    "Data-Driven Decision Systems", "Venture Capital & Entrepreneurship", 
+                    "International Business Laws", "Brand Valuation Architectures", 
+                    "Project Portfolio Frameworks", "Business Intelligence Models"
+                ],
+                "Humanities & Social Tracks": [
+                    "Structural Micro-History Concepts", "Cognitive Behavioral Psychology", 
+                    "Socio-Political Policy Mapping", "International Institutional Relations", 
+                    "Linguistic Typology & Systems", "Anthropological Cultural Nodes", 
+                    "Applied Ethics & Morality Metrics", "Geopolitical Boundary Geographies", 
+                    "Mass Communication Frameworks", "Archaeological Data Formats"
+                ]
+            }
+            
+            # Load specific subjects dynamically based on category stream choice
+            target_subject = st.selectbox("Select Target Analytics Track", options=stream_subjects[target_stream])
             target_cgpa = st.slider("Set Desired Target Cumulative CGPA", 4.0, 10.0, 8.5, step=0.1)
 
         with col2:
@@ -186,7 +211,7 @@ try:
         confidence_score = max(5, min(100, int((readiness_score * 0.6) + (study_consistency * 0.4) - (backlog_prob * 0.1))))
         syllabus_coverage = max(15, min(100, int((study_hours * 5) + (assignment_score * 0.3) + (attendance * 0.1))))
 
-        credit_weight = 4 if "TOC" in target_subject or "DAA" in target_subject or "Corporate" in target_subject or "Genetics" in target_subject else 3
+        credit_weight = 4 if "TOC" in target_subject or "DAA" in target_subject or "Strategy" in target_subject else 3
         credit_integrity = round((attendance * 0.01) * credit_weight * (predicted_gpa / 10), 2)
 
         internal_marks = round(min(20.0, (raised_hands * 0.04) + (visited_resources * 0.04) + (assignment_score * 0.12)), 1)
@@ -202,26 +227,29 @@ try:
 
         career_ratio = int((study_consistency * 0.6) + (visited_resources * 0.4) - (extracurriculars * 4))
         
-        # Split career logic according to active tracking stream
-        if "Engineering" in target_subject:
+        # Split career logic across streams
+        if "Engineering" in target_stream:
             career_inclination = "Technical (Core Engineering/R&D)" if career_ratio >= 45 else "Management (Product Operations)"
-        elif "Commerce" in target_subject:
+        elif "Commerce" in target_stream:
             career_inclination = "Quantitative Analytics & Fintech" if career_ratio >= 45 else "Corporate Auditing & Consulting"
-        else:
+        elif "Biological" in target_stream:
             career_inclination = "Biotech Lab Research & Genomic R&D" if career_ratio >= 45 else "Clinical Health & Administration"
+        elif "MBA" in target_stream:
+            career_inclination = "Strategic Operations & Product Lead" if career_ratio >= 45 else "Human Capital & Enterprise HR"
+        else:
+            career_inclination = "Sociological Research & Think-Tank" if career_ratio >= 45 else "Public Policy & Bureaucracy Admin"
 
         study_efficiency = round((visited_resources + assignment_score) / max(1, study_hours * 2), 1)
         weekend_burn = int((100 - study_consistency) * 0.6 + (stress_index * 0.4))
         routine_balance = max(10, min(100, int(100 - abs(8 - sleep_time)*5 - abs(5 - study_hours)*4 - (stress_index * 0.2))))
         recency_factor = int(max(1, 30 - (study_consistency * 0.28)))
 
-        # Dynamic mapping of strengths based on stream
-        if "Engineering" in target_subject:
-            strength_sub, weakness_sub = "Systems Computational Modeling", "Algorithmic Complexity Core"
-        elif "Commerce" in target_subject:
-            strength_sub, weakness_sub = "Statistical Econometrics", "Taxation & Legal Compliance Audit"
-        else:
-            strength_sub, weakness_sub = "Molecular Assays & Sequencing", "Structural Bio-informatics Data"
+        # Dynamic mapping of strengths based on stream selection
+        if "Engineering" in target_stream: strength_sub, weakness_sub = "Systems Computational Modeling", "Algorithmic Complexity Core"
+        elif "Commerce" in target_stream: strength_sub, weakness_sub = "Statistical Econometrics", "Taxation & Compliance Audit"
+        elif "Biological" in target_stream: strength_sub, weakness_sub = "Molecular Assays & Sequencing", "Structural Bio-informatics Data"
+        elif "MBA" in target_stream: strength_sub, weakness_sub = "Data Intelligence Systems", "Supply Chain Disruption Models"
+        else: strength_sub, weakness_sub = "Qualitative Typology Frameworks", "Socio-Economic Policy Evaluation"
 
         if readiness_score >= 75 and study_consistency >= 70: trend_tag, trend_color = "🚀 IMPROVING STEADILY", "#10b981"
         elif readiness_score <= 45 or attendance <= 65: trend_tag, trend_color = "🚨 CRITICAL DECLINE IN MATRIX", "#ef4444"
@@ -309,23 +337,29 @@ try:
     # ==================== TAB 2: ADVANCED HIGH-FIDELITY DYNAMIC CHAT NODES ====================
     with tab2:
         st.subheader("🖥️ AI Academic Strategy Interface Console")
-        st.write("Query the integrated diagnostic system regarding engineering curriculum strategy timelines, roadmap optimizations, or workflow balance protocols.")
+        st.write("Query the integrated diagnostic system regarding specific stream timeline strategy, roadmap optimizations, or workflow balance protocols.")
         user_query = st.text_input("💬 Input Command Input / Target Query Token:", placeholder="sys_query: type anything regarding exam, gpa, streams, study, placement...")
         
         if user_query:
-            st.markdown(f'<div class="cyber-terminal" style="border-left-color: #2563eb;"><b>[ST_REQUEST_LOG]:</b> Parsing raw input token matrices against analytics profile... Deployed Domain: {target_subject}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="cyber-terminal" style="border-left-color: #2563eb;"><b>[ST_REQUEST_LOG]:</b> Parsing raw input token matrices against analytics profile... Selected Module: {target_subject}</div>', unsafe_allow_html=True)
             
             q_clean = user_query.lower()
             
             # --- TRUE CROSS-DISCIPLINARY KEYWORD MATCHING ENGINE ---
-            if "toc" in q_clean or "theory of computation" in q_clean or "automata" in q_clean:
-                bot_text = f"⚙️ **TOC ENGINE COGNITION:** Executing computational strategy mapping for your profile. Your active workload balance shows {study_hours}h self-study metrics. Strategy: 1. Dedicate 40% of tracking blocks to Finite Automata closures & regular language transitions. 2. Map transition tables structurally to neutralize Mealy/Moore matrix confusion loops. 3. Target the structural pumping lemma constraints using systematic contradiction matrices."
+            if "toc" in q_clean or "theory of computation" in q_clean or "automata" in q_clean or "engineering" in q_clean or "tech" in q_clean:
+                bot_text = f"⚙️ **ENGINEERING PIPELINE ANALYSIS:** Strategy mapping active for **{target_subject}**. Your active setup shows {study_hours}h self-study blocks. Advice: 1. Dedicate 40% of tracking time to algorithmic logic boundaries and structural automaton closures. 2. Map systems execution graphs using clear matrix flows to clear bottleneck configurations. 3. Counter core logic gaps through structured past sessional trend analysis."
             
             elif "bio" in q_clean or "genetics" in q_clean or "microbiology" in q_clean or "science" in q_clean:
-                bot_text = f"🧬 **BIO-SCIENCE ANALYTICS CORE:** Custom roadmap initialized for current track: **{target_subject}**. To support a projected GPA of {predicted_gpa}, structure your data integration pipelines around: 1. Visual pathways visualization for enzymatic molecular kinetics. 2. Quantitative dataset clustering when modeling bioinformatics gene sequencing records. 3. Focus on strengthening core domain metrics: **{strength_sub}**."
+                bot_text = f"🧬 **BIO-SCIENCE ANALYTICS CORE:** Custom roadmap initialized for current track: **{target_subject}**. To support a projected GPA of {predicted_gpa}, structure your data integration pipelines around: 1. Visual pathways visualization for complex biological assays and kinetics. 2. Quantitative dataset clustering when modeling large-scale bioinformatics sequencing data files. 3. Prioritize mitigations for the *{weakness_sub}* focus block."
 
-            elif "commerce" in q_clean or "accounting" in q_clean or "finance" in q_clean or "audit" in q_clean:
-                bot_text = f"📈 **COMMERCE STRATEGY INTERFACE:** System status diagnostics active for **{target_subject}**. Financial and cost vectors require quantitative consistency layers. Strategy: 1. Boost workflow consistency parameters beyond 85% to optimize balance sheet verification simulations. 2. Balance the analytical portfolio models against real-time micro-study blocks ({study_hours}h active velocity). 3. Prioritize mitigations for the *{weakness_sub}* focus block."
+            elif "commerce" in q_clean or "accounting" in q_clean or "finance" in q_clean or "audit" in q_clean or "banking" in q_clean:
+                bot_text = f"📈 **COMMERCE & BANKING STRATEGY:** System status diagnostics active for **{target_subject}**. Financial and quantitative data frameworks require precise continuity layers. Strategy: 1. Boost workflow consistency parameters beyond 85% to optimize auditing simulations. 2. Balance the analytics asset models against stable micro-study blocks ({study_hours}h active velocity). 3. Leverage baseline strength tracks: **{strength_sub}**."
+
+            elif "mba" in q_clean or "management" in q_clean or "business" in q_clean or "hr" in q_clean:
+                bot_text = f"💼 **MBA & MANAGEMENT DISCIPLINE NODE:** Real-time optimization matrix active for **{target_subject}**. Executive business profiles require parity between analytical model logic and strategic tracking. Advice: 1. Target key operational case logs in decision systems. 2. Scale focus attention blocks to prevent routine balance rating deficits ({routine_balance}/100). 3. Keep current placement readiness alignment fixed on **{career_inclination}**."
+
+            elif "humanities" in q_clean or "history" in q_clean or "psychology" in q_clean or "policy" in q_clean:
+                bot_text = f"🏛️ **HUMANITIES & SOCIAL ANALYSIS NODE:** Structural tracking initialized for active module: **{target_subject}**. Humanities pipelines heavily rely on systematic qualitative metrics mapping. Advice: 1. Construct contextual conceptual maps to optimize macro behavioral policy models. 2. Maintain a memory recency factor baseline of {recency_factor} days through frequent concept retrieval. 3. Focus core study blocks onto: *{weakness_sub}*."
 
             elif "exam" in q_clean or "readiness" in q_clean or "prepare" in q_clean or "sessional" in q_clean:
                 bot_text = f"📝 **EXAM PERFORMANCE MATRIX ENGINE:** Your active Exam Readiness index is evaluated at **{readiness_score}/100**. Execution Roadmap: 1. Address the {weakness_sub} focus block immediately. 2. Since your assignment submission metrics are at {assignment_score}%, run high-frequency past sessional trends. 3. Do not compromise your current rest cycle ({sleep_time} Hours) within 48 hours of evaluation cycles to prevent severe cognitive load drift errors."
@@ -347,8 +381,7 @@ try:
                 bot_text = f"🧠 **COGNITIVE RISK ASSESSMENT:** Platform telemetry calculates a **Cognitive Fatigue Index of {cognitive_fatigue}%** with a Burnout Velocity of **{burnout_velocity}**. System diagnostics: Your sleep duration profile is locked at {sleep_time} hours against a {study_hours} hour study load. Advice: Avoid late-night workload variance adjustments. Stabilize your routine balance rating ({routine_balance}/100) by establishing strict operational study blocks to protect cognitive memory recency intervals."
                 
             else:
-                # Completely dynamic smart default fallback that pulls live structural parameters
-                bot_text = f"📡 **DYNAMIC SYSTEM DIAGNOSTICS ACTIVE:** Request successfully mapped for track: **{target_subject}**. The Scikit-Learn validation trees suggest modifying your current parameters (Attendance: {attendance}%, Study Blocks: {study_hours}h) to match a stable trajectory. Recommended: Fragment complex engineering/science units into daily tasks, leverage active recall protocols for **{strength_sub}**, and maintain routine parity metrics to eliminate retention risks."
+                bot_text = f"📡 **DYNAMIC SYSTEM DIAGNOSTICS ACTIVE:** Request successfully mapped for track: **{target_subject}** (Division: {target_stream}). The Scikit-Learn validation trees suggest modifying your current parameters (Attendance: {attendance}%, Study Blocks: {study_hours}h) to match a stable trajectory. Recommended: Fragment complex units into daily tasks, leverage active recall protocols for **{strength_sub}**, and maintain routine parity metrics to eliminate retention risks."
 
             st.markdown(f'<div class="cyber-terminal" style="border-left-color:#10b981; margin-top:10px;"><b style="color:#38bdf8;">[AI_ADVISOR_RESPONSE]:</b><br><br>{bot_text}</div>', unsafe_allow_html=True)
 
