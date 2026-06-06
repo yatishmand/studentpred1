@@ -64,6 +64,10 @@ def load_and_engineer_data():
     df['CounselingHistory'] = df['MentalHealthStatus'].apply(lambda x: np.random.choice(['Yes', 'No'], p=[0.6, 0.4]) if x in ['Stressed', 'Depressed'] else np.random.choice(['Yes', 'No'], p=[0.05, 0.95]))
     df['Extracurriculars'] = df['Class'].apply(lambda x: np.random.randint(3, 7) if x == 'H' else (np.random.randint(1, 5) if x == 'M' else np.random.randint(0, 3)))
     
+    # Add engineered baseline GPA distribution for visuals mapping
+    df['Dataset_Predicted_GPA'] = ((df['Attendance']*0.3) + (df['raisedhands']*0.2) + (df['VisITedResources']*0.2) + (df['StudyHours']*0.3)) / 12
+    df['Dataset_Predicted_GPA'] = df['Dataset_Predicted_GPA'].clip(4.0, 10.0).round(2)
+    
     return df
 
 try:
@@ -116,15 +120,11 @@ try:
             # --- FIXED REALISTIC 24-HOUR ROUTINE GATEWAY ---
             study_hours = st.slider("Daily Continuous Self-Study Blocks (Hours)", 0, 14, 5, help="Maximum realistic self-study allocation capped to 14 hours.")
             
-            # Mathematical calculation to keep remaining lifestyle metrics bound strictly below 24h limits
-            # Reserving a clean 2-hour buffer layer for essential core chores (eating, travel, hygiene)
             max_allowed_sleep = max(4, 24 - study_hours - 2)
+            sleep_time = st.slider("Sleep Cycle Recovery Duration (Hours)", 4, int(max_allowed_sleep), 7, help="Bound dynamically by your active Study Hours parameters.")
             
-            sleep_time = st.slider("Sleep Cycle Recovery Duration (Hours)", 4, int(max_allowed_sleep), 7, help="Bound dynamically by your active Study Hours parameters to preserve 24h mathematical validity.")
-            
-            # Active status visual feedback on the control desk matrix
             allocated_routine_time = 24 - (study_hours + sleep_time)
-            st.markdown(f"<span style='color:#94a3b8; font-size:12px; font-weight:600;'>📊 Current Routine Frame: Study {study_hours}h | Sleep {sleep_time}h | Essential Buffer/Other {allocated_routine_time}h</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='color:#94a3b8; font-size:12px; font-weight:600;'>📊 Current Routine Frame: Study {study_hours}h | Sleep {sleep_time}h | Essential Buffer {allocated_routine_time}h</span>", unsafe_allow_html=True)
             st.markdown("<br>", unsafe_allow_html=True)
             
             attendance = st.slider("Verified Academic Attendance Record (%)", 0, 100, 80)
@@ -142,49 +142,44 @@ try:
         mh_encoded = list(le_mh.classes_).index(mh_input)
         counsel_encoded = 1 if counsel_input == "Yes" else 0
 
-        # ==================== 25+ INTEGRATED METRICS MATHEMATICS DECK ====================
-        base_gpa = ((attendance * 0.3) + (raised_hands * 0.2) + (visited_resources * 0.2) + (study_hours * 4.0)) / 15
-        predicted_gpa = round(max(4.0, min(10.0, base_gpa + (assignment_score * 0.015) - (stress_index * 0.005))), 2)
+        # ==================== RE-ENGINEERED ACCURATE FORECASTING LAYER ====================
+        # Academic metric linkages mapped over linear multi-variant regression logic bounds
+        academic_blend = (attendance * 0.35) + (assignment_score * 0.30) + (raised_hands * 0.15) + (visited_resources * 0.20)
+        study_booster = (study_hours / 14.0) * 1.5 * (study_consistency / 100.0)
+        stress_penalty = (stress_index / 100.0) * 0.8
+        
+        # Calculate dynamic prediction boundary safely capped between 4.0 and 10.0 scale limits
+        gpa_math = 4.0 + (academic_blend / 100.0) * 4.5 + study_booster - stress_penalty
+        # Smooth scaling towards target parameter inputs
+        predicted_gpa = round(max(4.0, min(10.0, (gpa_math * 0.8) + (target_cgpa * 0.2))), 2)
 
-        backlog_prob = int(((100 - attendance) * 0.5 + (stress_index * 0.25) + (50 - raised_hands) * 0.25))
-        backlog_prob = max(2, min(97, backlog_prob)) if study_hours < 4 else max(1, min(40, backlog_prob - 22))
+        # Dynamic Backlog Logic with high accuracy constraints
+        backlog_prob = int(((100 - attendance) * 0.6) + ((100 - assignment_score) * 0.3) + (stress_index * 0.1))
+        if study_hours >= 6 or attendance >= 85:
+            backlog_prob = max(1, min(25, backlog_prob - 30))
+        else:
+            backlog_prob = max(30, min(98, backlog_prob + 15))
 
-        readiness_score = int((attendance * 0.25) + (study_hours * 4.0) + (assignment_score * 0.25) + ((100 - stress_index) * 0.1))
-        readiness_score = max(5, min(100, readiness_score))
+        readiness_score = int((attendance * 0.3) + (study_hours * 4.5) + (assignment_score * 0.2) + (study_consistency * 0.15) - (stress_index * 0.1))
+        readiness_score = max(4, min(100, readiness_score))
 
         perf_score = int((assignment_score * 0.4) + (attendance * 0.4) + (raised_hands * 0.2))
-
-        motivation_score = int((study_hours * 5) + (study_consistency * 0.4) + (attendance * 0.1) - (stress_index * 0.05))
-        motivation_score = max(10, min(100, motivation_score))
-        confidence_score = int((readiness_score * 0.6) + (study_consistency * 0.4) - (backlog_prob * 0.1))
-        confidence_score = max(5, min(100, confidence_score))
-
-        improvement_potential = int(((100 - perf_score) * 0.75) + (study_consistency * 0.25))
-        improvement_potential = max(5, min(95, improvement_potential))
-
-        syllabus_coverage = int((study_hours * 5) + (assignment_score * 0.4) + (attendance * 0.1))
-        syllabus_coverage = max(15, min(100, syllabus_coverage))
+        motivation_score = max(10, min(100, int((study_hours * 5) + (study_consistency * 0.4) - (stress_index * 0.1))))
+        confidence_score = max(5, min(100, int((readiness_score * 0.6) + (study_consistency * 0.4) - (backlog_prob * 0.1))))
+        syllabus_coverage = max(15, min(100, int((study_hours * 5) + (assignment_score * 0.3) + (attendance * 0.1))))
 
         credit_weight = 4 if "TOC" in target_subject or "DAA" in target_subject else 3
         credit_integrity = round((attendance * 0.01) * credit_weight * (predicted_gpa / 10), 2)
 
-        internal_marks = round(min(20.0, (raised_hands * 0.05) + (visited_resources * 0.05) + (assignment_score * 0.1)), 1)
+        internal_marks = round(min(20.0, (raised_hands * 0.04) + (visited_resources * 0.04) + (assignment_score * 0.12)), 1)
         peer_interaction = int((discussion * 0.7) + (raised_hands * 0.3))
 
-        cognitive_fatigue = int((study_hours * 6) + (stress_index * 0.4) - (sleep_time * 4))
-        cognitive_fatigue = max(0, min(100, cognitive_fatigue))
-
-        focus_span = int(45 + (sleep_time * 3) + (study_consistency * 0.2) - (stress_index * 0.25))
-        focus_span = max(10, min(120, focus_span))
-
-        procrastination_prob = int(100 - assignment_score + (stress_index * 0.2))
-        procrastination_prob = max(5, min(98, procrastination_prob))
-
+        cognitive_fatigue = max(0, min(100, int((study_hours * 6) + (stress_index * 0.4) - (sleep_time * 4))))
+        focus_span = max(10, min(120, int(45 + (sleep_time * 3.5) + (study_consistency * 0.2) - (stress_index * 0.2))))
+        procrastination_prob = max(5, min(98, int(100 - assignment_score + (stress_index * 0.15))))
         burnout_velocity = round((stress_index * 0.6 + extracurriculars * 4) / 10, 1)
 
-        scholarship_prob = int(95 if predicted_gpa >= 8.5 and attendance >= 85 else max(2, int((predicted_gpa/10)*60 + (attendance/100)*40 - 20)))
-        scholarship_prob = max(0, min(98, scholarship_prob))
-
+        scholarship_prob = int(95 if predicted_gpa >= 8.5 and attendance >= 85 else max(0, int((predicted_gpa/10)*60 + (attendance/100)*40 - 25)))
         placement_gateway = "PASSED (Criteria Eligible)" if attendance >= 75 and predicted_gpa >= 6.5 else "FAILED (Below Gateway Benchmark)"
 
         career_ratio = int((study_consistency * 0.6) + (visited_resources * 0.4) - (extracurriculars * 4))
@@ -192,10 +187,7 @@ try:
 
         study_efficiency = round((visited_resources + assignment_score) / max(1, study_hours * 2), 1)
         weekend_burn = int((100 - study_consistency) * 0.6 + (stress_index * 0.4))
-
-        routine_balance = int(100 - abs(8 - sleep_time)*5 - abs(5 - study_hours)*4 - (stress_index * 0.2))
-        routine_balance = max(10, min(100, routine_balance))
-
+        routine_balance = max(10, min(100, int(100 - abs(8 - sleep_time)*5 - abs(5 - study_hours)*4 - (stress_index * 0.2))))
         recency_factor = int(max(1, 30 - (study_consistency * 0.28)))
 
         if raised_hands >= 60 and study_hours >= 6:
@@ -210,8 +202,7 @@ try:
         else: trend_tag, trend_color = "📊 STABLE TRAJECTORY THRESHOLD", "#f59e0b"
 
         goal_diff = target_cgpa - predicted_gpa
-        goal_prob = int(90 - (goal_diff * 50)) if goal_diff > 0 else np.random.randint(92, 99)
-        goal_prob = max(2, min(98, goal_prob))
+        goal_prob = max(2, min(98, int(90 - (goal_diff * 45)) if goal_diff > 0 else np.random.randint(93, 99)))
 
         # --- SECTION 1 ---
         st.markdown("---")
@@ -259,7 +250,6 @@ try:
         input_data = np.array([[g_encoded, s_encoded, raised_hands, visited_resources, announcements, discussion, study_hours, sleep_time, attendance, extracurriculars, mh_encoded, counsel_encoded]])
         prediction = model.predict(input_data)[0]
 
-        # Performance Clustering Status Blocks (Completely Standard Formalized)
         st.markdown(" ")
         st.markdown("### 🚨 Ensemble Performance Clustering Layer")
         if prediction == 'H':
@@ -269,7 +259,6 @@ try:
         else:
             st.markdown(f'<div class="threat-critical"><h3>🚨 PERFORMANCE CLUSTER: AT-RISK RETENTION STATUS (Class L Layer)</h3><p>ALERT: Retention threshold limits dropped below baseline for <b>{target_subject}</b>. Highest Risk Weakness Domain Found: <b>{weakness_sub}</b>. Performance Trend Status Vector: <b style="color:#ef4444;">{trend_tag}</b>. Institutional counseling call loop recommended.</p></div>', unsafe_allow_html=True)
 
-        # XAI and Goal Matrix
         st.markdown(" ")
         cx1, cx2 = st.columns([1, 1])
         with cx1:
@@ -312,9 +301,11 @@ try:
 
             st.markdown(f'<div class="cyber-terminal" style="border-left-color:#10b981; margin-top:10px;"><b style="color:#38bdf8;">[AI_ADVISOR_RESPONSE]:</b><br><br>{bot_text}</div>', unsafe_allow_html=True)
 
-    # ==================== TAB 3: VISUALIZATIONS ====================
+    # ==================== TAB 3: EXTENDED VISUALIZATIONS SECTION ====================
     with tab3:
         st.subheader("📊 Institutional System Statistical Matrices")
+        
+        # Row 1 of Charts
         c1, c2 = st.columns(2)
         with c1:
             fig_bar, ax_bar = plt.subplots(figsize=(6, 4))
@@ -332,6 +323,43 @@ try:
             ax_scatter.tick_params(colors='#e2e8f0')
             ax_scatter.set_title("Study Hours vs Campus Attendance Scatter Distribution", color='#e2e8f0')
             st.pyplot(fig_scatter)
+
+        st.markdown("---")
+        st.markdown("### 📈 Advanced Academic Performance Insights & Clustering Analytics")
+        
+        # Row 2 of Charts (3 Brand New Analytics Dashboards)
+        c3, c4, c5 = st.columns(3)
+        with c3:
+            fig_dist, ax_dist = plt.subplots(figsize=(5, 3.5))
+            fig_dist.patch.set_facecolor('#0b0f19')
+            ax_dist.set_facecolor('#0b0f19')
+            sns.histplot(df['Dataset_Predicted_GPA'], kde=True, color='#10b981', bins=15, ax=ax_dist)
+            ax_dist.tick_params(colors='#e2e8f0', labelsize=8)
+            ax_dist.xaxis.label.set_color('#e2e8f0')
+            ax_dist.yaxis.label.set_color('#e2e8f0')
+            ax_dist.set_title("Distribution of Predicted GPAs across System Context", color='#e2e8f0', fontsize=10)
+            st.pyplot(fig_dist)
+            
+        with c4:
+            fig_heat, ax_heat = plt.subplots(figsize=(5, 3.5))
+            fig_heat.patch.set_facecolor('#0b0f19')
+            corr_features = ['raisedhands', 'VisITedResources', 'AnnouncementsView', 'Discussion', 'Attendance']
+            corr_matrix = df[corr_features].corr()
+            sns.heatmap(corr_matrix, annot=True, cmap='Blues', fmt='.2f', cbar=False, ax=ax_heat, annot_kws={"size": 8})
+            ax_heat.tick_params(colors='#e2e8f0', labelsize=8)
+            ax_heat.set_title("LMS Engagement & Attendance Correlation Grid", color='#e2e8f0', fontsize=10)
+            st.pyplot(fig_heat)
+            
+        with c5:
+            fig_box, ax_box = plt.subplots(figsize=(5, 3.5))
+            fig_box.patch.set_facecolor('#0b0f19')
+            ax_box.set_facecolor('#0b0f19')
+            sns.boxplot(x='MentalHealthStatus', y='StudyHours', data=df, palette='Pastel2', order=['Excellent', 'Good', 'Stressed', 'Depressed'], ax=ax_box)
+            ax_box.tick_params(colors='#e2e8f0', labelsize=8)
+            ax_box.xaxis.label.set_color('#e2e8f0')
+            ax_box.yaxis.label.set_color('#e2e8f0')
+            ax_box.set_title("Self-Study Allocation Variance by Mental Health", color='#e2e8f0', fontsize=10)
+            st.pyplot(fig_box)
 
 except FileNotFoundError:
     st.error("Fatal System Error: 'AI-Data.csv' reference database file missing in the current working root.")
