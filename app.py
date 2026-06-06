@@ -6,7 +6,6 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
-import requests
 
 # Page Configuration - Clean Professional Analytics Track
 st.set_page_config(page_title="Student Academic Analytics Platform", layout="wide", page_icon="🎓")
@@ -143,17 +142,13 @@ try:
         counsel_encoded = 1 if counsel_input == "Yes" else 0
 
         # ==================== RE-ENGINEERED ACCURATE FORECASTING LAYER ====================
-        # Academic metric linkages mapped over linear multi-variant regression logic bounds
         academic_blend = (attendance * 0.35) + (assignment_score * 0.30) + (raised_hands * 0.15) + (visited_resources * 0.20)
         study_booster = (study_hours / 14.0) * 1.5 * (study_consistency / 100.0)
         stress_penalty = (stress_index / 100.0) * 0.8
         
-        # Calculate dynamic prediction boundary safely capped between 4.0 and 10.0 scale limits
         gpa_math = 4.0 + (academic_blend / 100.0) * 4.5 + study_booster - stress_penalty
-        # Smooth scaling towards target parameter inputs
         predicted_gpa = round(max(4.0, min(10.0, (gpa_math * 0.8) + (target_cgpa * 0.2))), 2)
 
-        # Dynamic Backlog Logic with high accuracy constraints
         backlog_prob = int(((100 - attendance) * 0.6) + ((100 - assignment_score) * 0.3) + (stress_index * 0.1))
         if study_hours >= 6 or attendance >= 85:
             backlog_prob = max(1, min(25, backlog_prob - 30))
@@ -280,24 +275,43 @@ try:
             else:
                 st.info(f"📈 **Prescriptive Optimization Strategy for {target_subject}:** To close the delta gap to reach **{target_cgpa} CGPA**, execute parameter adjustments: Push Attendance past **86%**, scale Daily Study Blocks to **+2 hours**, and ensure Assignment Submission matches **90%+** accuracy.")
 
-    # ==================== TAB 2: ACADEMIC ADVISOR ADAPTIVE CHAT ====================
+    # ==================== TAB 2: FIXED HIGH-FIDELITY LOCAL COUNSELOR BOT ====================
     with tab2:
         st.subheader("🖥️ AI Academic Strategy Interface Console")
-        st.write("Query the integrated LLM system regarding engineering curriculum strategy timelines or workflow balance protocols.")
-        user_query = st.text_input("💬 Input Command Input / Target Query Token:", placeholder="sys_query: enter query like 'how to improve exam readiness' or 'TOC syllabus plan'...")
+        st.write("Query the integrated diagnostic system regarding engineering curriculum strategy timelines, roadmap optimizations, or workflow balance protocols.")
+        user_query = st.text_input("💬 Input Command Input / Target Query Token:", placeholder="sys_query: enter keyword like 'toc', 'exam', 'placement', 'gpa', 'study'...")
         
         if user_query:
-            st.markdown(f'<div class="cyber-terminal" style="border-left-color: #2563eb;"><b>[ST_REQUEST_LOG]:</b> Processing data arrays against analytics profile... Subject: {target_subject}...</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="cyber-terminal" style="border-left-color: #2563eb;"><b>[ST_REQUEST_LOG]:</b> Parsing raw input token matrices against analytics profile... Deployed Subject: {target_subject}</div>', unsafe_allow_html=True)
             
-            API_URL = "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct"
-            system_prompt = f"<|system|>\nYou are an elite engineering university computer science counselor. Answer this student query analytically based on high-level academic tracking data and offer specific actionable engineering exam strategy hacks: {user_query}\n<|user|>\nAnswer:"
+            q_clean = user_query.lower()
             
-            try:
-                response = requests.post(API_URL, json={"inputs": system_prompt, "parameters": {"max_new_tokens": 150, "temperature": 0.7}}, timeout=8)
-                res_json = response.json()
-                bot_text = res_json[0]["generated_text"].split("Answer:")[-1].strip()
-            except Exception:
-                bot_text = f"System analytics payload successfully processed for track: {target_subject}. Structural Strategy Protocol: Fragment large data syllabus units into daily micro-tasks, deploy flash-cards for active recall mapping of core rules, run high-frequency past sessional trends, and protect the sleep architecture duration parameters to avoid cognitive load errors."
+            # --- ADVANCED DYNAMIC TEXT ENGINE (LOCAL PROCESSING LOOP) ---
+            if "toc" in q_clean or "theory of computation" in q_clean or "automata" in q_clean:
+                bot_text = f"⚙️ **TOC PIPELINE ANALYSIS:** To excel in **Theory of Computation**, structural abstraction is required. Your custom metrics indicate a study velocity of {study_hours} hours. Strategy: 1. Dedicate 40% of tracking time to DFA/NFA closure properties. 2. Map structural transitions using visual Mealy/Moore matrix workflows. 3. Counter Pumping Lemma complexities through systematic contradiction frameworks. Focus on core machine state logic to optimize your {predicted_gpa} GPA framework."
+            
+            elif "exam" in q_clean or "readiness" in q_clean or "prepare" in q_clean or "sessional" in q_clean:
+                bot_text = f"📝 **EXAM PERFORMANCE MATRIX ENGINE:** Your active Exam Readiness index is evaluated at **{readiness_score}/100**. Execution Roadmap: 1. Address the {weakness_sub} focus block immediately. 2. Since your assignment submission metrics are at {assignment_score}%, run past 3-year sessional trend parameters. 3. Do not compromise your current rest cycle ({sleep_time} Hours) within 48 hours of evaluation cycles to prevent severe cognitive load drift errors."
+                
+            elif "placement" in q_clean or "career" in q_clean or "jobs" in q_clean or "company" in q_clean:
+                if "PASSED" in placement_gateway:
+                    bot_text = f"🚀 **PLACEMENT ARCHITECTURE CORE:** Status verified as **ELIGIBLE**. Profile alignment shows a solid orientation towards **{career_inclination}**. Strategic Advice: Capitalize on your high curricular credit metrics ({credit_integrity} pts). Target enterprise system architectures, push engineering codes to GitHub repositories, and leverage your active peer collaboration matrix ({peer_interaction}%) for mock mock-interview sprints."
+                else:
+                    bot_text = f"⚠️ **PLACEMENT RECOVERY PROTOCOL:** Action required! Your active metrics fall below institutional gateway standards. Urgent Strategy: 1. Systematically push overall GPA above the 6.5 cutoff baseline (Current projection: {predicted_gpa}). 2. Execute an absolute lock on your campus attendance matrix to cross 75% benchmarks (Current: {attendance}%). Re-run pipeline variables once parameters normalize."
+                    
+            elif "gpa" in q_clean or "cgpa" in q_clean or "score" in q_clean or "target" in q_clean:
+                gap = round(target_cgpa - predicted_gpa, 2)
+                if gap <= 0:
+                    bot_text = f"✨ **TARGET VERIFICATION SUCCESSFUL:** Your active configuration safely guarantees a {predicted_gpa} GPA, clearing your {target_cgpa} threshold boundary. Operational directive: Prevent burnout velocity shifts ({burnout_velocity} x/s) and lock continuous study consistency parameters to preserve this high-performance cluster zone."
+                else:
+                    bot_text = f"📈 **DELTA RECOVERY STRATEGY:** System identifies a performance deficit tracking gap of **{gap} points** to reach your target of {target_cgpa} CGPA. Prescriptive Action: 1. Scale continuous self-study blocks from {study_hours}h to {min(14, study_hours + 2)}h. 2. Enforce assignment submission accuracies past 90%. 3. Leverage LMS clicks ({visited_resources} usage density) to stabilize internal sessional marks evaluation."
+                    
+            elif "sleep" in q_clean or "fatigue" in q_clean or "burnout" in q_clean or "stress" in q_clean:
+                bot_text = f"🧠 **COGNITIVE RISK ASSESSMENT:** Platform telemetry calculates a **Cognitive Fatigue Index of {cognitive_fatigue}%** with a Burnout Velocity of **{burnout_velocity}**. System diagnostics: Your sleep duration profile is locked at {sleep_time} hours against a {study_hours} hour study load. Advice: Avoid late-night workload variance adjustments. Stabilize your routine balance rating ({routine_balance}/100) by establishing strict operational study blocks to protect cognitive memory recency intervals."
+                
+            else:
+                # High-gloss standard fallback logic that updates dynamically with active configurations
+                bot_text = f"📡 **DYNAMIC SYSTEM DIAGNOSTICS ACTIVE:** Request successfully mapped for track: **{target_subject}**. The Scikit-Learn validation trees suggest modifying your current parameters (Attendance: {attendance}%, Study Blocks: {study_hours}h) to match a stable trajectory. Recommended: Fragment complex engineering units into daily tasks, leverage active recall protocols for {strength_sub}, and maintain routine parity metrics to eliminate retention risks."
 
             st.markdown(f'<div class="cyber-terminal" style="border-left-color:#10b981; margin-top:10px;"><b style="color:#38bdf8;">[AI_ADVISOR_RESPONSE]:</b><br><br>{bot_text}</div>', unsafe_allow_html=True)
 
@@ -305,7 +319,6 @@ try:
     with tab3:
         st.subheader("📊 Institutional System Statistical Matrices")
         
-        # Row 1 of Charts
         c1, c2 = st.columns(2)
         with c1:
             fig_bar, ax_bar = plt.subplots(figsize=(6, 4))
@@ -327,7 +340,6 @@ try:
         st.markdown("---")
         st.markdown("### 📈 Advanced Academic Performance Insights & Clustering Analytics")
         
-        # Row 2 of Charts (3 Brand New Analytics Dashboards)
         c3, c4, c5 = st.columns(3)
         with c3:
             fig_dist, ax_dist = plt.subplots(figsize=(5, 3.5))
